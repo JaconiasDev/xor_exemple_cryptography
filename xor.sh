@@ -109,7 +109,7 @@ Decipher_Text(){
 }
 
 
-if [ -z "${#@}" ]; then
+if [ "$#" -eq 0 ]; then
     echo -e "\n[+] - Error Voce Não passou argumentos\n"
     echo -e "[+] - Modo de Uso : $0 -M [sua-mensagem-aqui] -K [sua-key-aqui] \n"
     exit 1
