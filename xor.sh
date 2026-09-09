@@ -20,17 +20,60 @@ Cipher_text(){
     Messager_text=$1
     Key_cipher=$2
 
+    echo -e "\n========== Iniciando Conversao de Message e Key pra Decimal ======== \n"
+
+    progress_1=""
+    M_progress=""
+
+    progress_2=""
+    K_progress=""
+
+    c_progress=""
+
+
     for ((i = 0 ; i < ${#Messager_text}; i++ )); do
         # converter caracter para decimal 
         printf -v ascii_d "%d" "'${Messager_text:$i:1}" # fatias da string
+
         # converte a key para decimal para aplicar o XOR operator 
         Position=$(( $i %  ${#Key_cipher} )) # rotação da chave (modulo do I pelo Tamanho da key)
         printf -v ascii_k "%d" "'${Key_cipher:Position:1}"
+
         # aplica o xor na palavra 
         Xor_cipher=$(( ascii_d ^ ascii_k )) # aplica o xor de caracter pra caracter 
 
         printf -v d_for_hex "%02x" "$Xor_cipher"
-        result_xor+="$d_for_hex"
+        result_xor+="$d_for_hex"  
+
+        if [ $i -eq 0 ]; then
+            #pula 4 linhas pra baixo 
+            echo -e "\n\n\n\n"
+            progress_1="$ascii_d"
+            M_progress="${Messager_text:$i:1}"
+            progress_2="$ascii_k"
+            K_progress="${Key_cipher:Position:1}"
+            c_progress="$d_for_hex"
+
+        else 
+            c_progress+=", $d_for_hex"
+            progress_1+=", $ascii_d"
+            M_progress+=", ${Messager_text:$i:1}"
+            progress_2+=", $ascii_k"
+            K_progress+=", ${Key_cipher:Position:1}"
+
+        fi 
+        # pula 5 linhas pra cima 
+        echo -ne "\033[A\033[A\033[A\033[A\033[A"
+    
+        # Imprime as duas linhas atualizadas
+        echo -e "[+] - MESSAGER PARA DECIMAL       : \e[31m[$M_progress]\e[0m -> \e[31m[$progress_1]\e[0m\033[K"
+        echo -e "[+] - KEY PARA DECIMAL            : \e[33m[$K_progress]\e[0m -> \e[33m[$progress_2]\e[0m\033[K"
+        echo -e "[+] - APLICANDO XOR [ M ]         : \e[34m[$(printf "\\$(printf '%03o' "$ascii_d")" | xxd -b | awk '{print $2}')] - bit de [$(printf "\\$(printf '%03o' "$ascii_d")")]\e[0m\033[K"
+        echo -e "[+] - APLICANDO XOR [ K ]         : \e[34m[$(printf "\\$(printf '%03o' "$ascii_k")" | xxd -b | awk '{print $2}')] - bit de [$(printf "\\$(printf '%03o' "$ascii_k")")]\e[0m\033[K"
+        echo -e "[+] - MESSAGER CIPHER             : \e[33m[$(printf "\\$(printf '%03o' "$Xor_cipher")" | xxd -b | awk '{print $2}')]\e[0m -> \e[33m[$c_progress]\e[0m\033[K"
+
+        sleep 1 
+
     done
 }
 
@@ -74,15 +117,18 @@ fi
 
 Cipher_text $Messager $Key
 echo 
-echo "[+] ======== cifrada cifrada =============="
-echo "[-] - Messager Pura  : $Messager"
-echo "[-] - key-For-Xor    : $Key"
-echo -e "[-] - Palavra Cifrada : $result_xor\n"
+echo -e "[+] \e[31m======== cifrada cifrada ==============\e[0m"
+echo -e "[-] - Messager Pura  : \e[32m$Messager\e[0m"
+echo -e "[-] - key-For-Xor    : \e[33m$Key\e[0m"
+echo -e "[-] - Palavra Cifrada : \e[31m$result_xor\e[0m"
+echo 
+
+sleep 1
 
 Decipher_Text $result_xor $Key
 
-echo "[+] ======= palavra Descifrada ============"
-echo "[-] - palavra Cipher   : $result_xor"
-echo "[-] - key-For-Xor : $Key"
-echo "[-] - palavra Decipher  : $result_Xor_Decipher"
+echo -e "[+] \e[32m======= palavra Descifrada ============\e[0m"
+echo -e "[-] - palavra Cipher   : \e[31m$result_xor\e[0m"
+echo -e "[-] - key-For-Xor : \e[33m$Key\e[0m"
+echo -e "[-] - palavra Decipher  : \e[32m$result_Xor_Decipher\e[0m"
 echo 
