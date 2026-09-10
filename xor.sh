@@ -153,7 +153,7 @@ fi
 
 
 Cipher_text $Messager $Key
-sleep1
+sleep 1
 Decipher_Text $result_xor $Key
 
 echo 
