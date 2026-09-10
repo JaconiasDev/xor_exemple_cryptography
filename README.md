@@ -10,7 +10,7 @@ sudo chmod u+x ./xor.sh
 
 ```
 ## Exemple Use
-<img width="1264" height="711" alt="Captura de tela de 2026-09-08 22-14-33" src="https://github.com/user-attachments/assets/ec4f0770-4d52-4e95-8010-e063df8f96e1" />
+<img width="1376" height="608" alt="Captura de tela de 2026-09-10 19-06-24" src="https://github.com/user-attachments/assets/c9c4ef4c-1404-4ae9-8616-ac5a402e8a89" />
 
 
 ##
